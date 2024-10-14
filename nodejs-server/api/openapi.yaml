@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: Student API
+  description: An API that allows users to obtain existing information of employees
+    or post info of new employees
+  contact:
+    name: Keerthana
+    url: Student_Management3.0.com
+    email: rkeerthana2312@gmail.com
+  version: 1.0.0
+servers:
+- url: http://dev.student.com/v1
+  description: Student Server
+paths:
+  /employees:
+    get:
+      description: Obtain information about employees from the HR database
+      operationId: employeesGET
+      parameters:
+      - name: bodyLimit
+        in: query
+        description: The amount of employees returned
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 20
+          minimum: 10
+          type: integer
+          example: 15
+      - name: pageLimit
+        in: query
+        description: The pages to return employees info
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 5
+          minimum: 1
+          type: integer
+          example: 2
+      responses:
+        "200":
+          description: Successfull pull of employee info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+      x-swagger-router-controller: Default
+    post:
+      description: Creates a new employee  in the database
+      operationId: employeesPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        "200":
+          description: Successfully created a new employee
+      x-swagger-router-controller: Default
+  /employee/{id}:
+    get:
+      description: Obtain information about specific employee
+      operationId: employeeIdGET
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the employee
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 54
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    Employee:
+      properties:
+        id:
+          type: integer
+          example: 4
+        employee name:
+          type: string
+          example: Keerthana
+        employee title:
+          type: string
+          example: Team Member
+      description: Model containing employee info
+      example:
+        employee name: Keerthana
+        id: 4
+        employee title: Team Member
+    inline_response_200:
+      properties:
+        id:
+          type: integer
+          example: 4
+        employee name:
+          type: string
+          example: Keerthana
+        employee title:
+          type: string
+          example: Team Member
+      example:
+        employee name: Keerthana
+        id: 4
+        employee title: Team Member
